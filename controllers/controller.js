@@ -15,7 +15,15 @@ await URL.create({
 });
 
 
-return res.status(201).json({ id: shortID});
+return res.status(201).json(
+    { 
+        id: shortID,
+        url: body.url,
+        createdAt: body.createdAt,
+        updatedAt: body.updatedAt
+
+    
+    });
     
 }
 
