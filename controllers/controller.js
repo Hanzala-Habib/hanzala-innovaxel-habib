@@ -73,7 +73,7 @@ async function updateId(req,res) {
     const shortId=req.params.shortUrl;
     const {shortCode: newShortCode}=req.body
 
-    await URL.findOneAndUpdate({
+    const updatedEntry=await URL.findOneAndUpdate({
         shortId
     },{
         shortUrl: newShortCode
@@ -89,9 +89,24 @@ async function updateId(req,res) {
     
 }
 
+async function deleteShortId(req,res) {
+    const IdTodelete=req.params.shortUrl;
+    const deleteEntry=await URL.findOneAndDelete({
+        shortUrl: IdTodelete
+    },{
+        new: true
+    });
+     if (!deleteEntry) {
+            return res.status(404).json({ msg: "Short URL not found." });
+        }
+
+    return res.status(200).json({ msg: "Short URL deleted successfully." });
+    
+}
 module.exports={
     generateShortUrl,
     getOriginalUrl,
     getUrlAnalytics,
-    updateId
+    updateId,
+    deleteShortId
 }
