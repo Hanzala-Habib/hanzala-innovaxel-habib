@@ -27,39 +27,34 @@ return res.status(201).json(
     
 }
 
-async function getOriginalUrl(req,res) {
+async function getOriginalUrl(req, res) {
+    const shortID = req.params.shortUrl;
 
-    const shortID= req.params.shortUrl
-   const entry= await URL.findOneAndUpdate({
-        shortID
-    },{
-        $push:{
-            totalclicks:{
-                timestamp: Date.now(),
+    const entry = await URL.findOneAndUpdate(
+        { shortID },
+        {
+            $push: {
+                totalclicks: {
+                    timestamp: Date.now(),
+                }
             }
-        }
-    });
+        },
+        { new: true }
+    );
 
-     
-
-    if(entry){
-         return res.status(200).json({
+    if (entry) {
+        return res.status(200).json({
             id: entry._id,
             url: entry.url,
             shortCode: entry.shortUrl,
             createdAt: entry.createdAt,
             updatedAt: entry.updatedAt
         });
-
+    } else {
+        return res.status(404).json({ error: "Couldn't find the URL" });
     }
-    else{
-        res.status(404).json({error: "couldnt fint the url"});
-    }
-
-   
-
-    
 }
+
 
 async function getUrlAnalytics(req,res) {
 
@@ -99,13 +94,14 @@ async function updateId(req,res) {
 
 async function deleteShortId(req,res) {
     const IdTodelete=req.params.shortUrl;
+    
     const deleteEntry=await URL.findOneAndDelete({
-        shortUrl: IdTodelete
+        IdTodelete
     },{
         new: true
     });
      if (!deleteEntry) {
-            return res.status(404).json({ msg: "Short URL not found." });
+            return res.status(404).json({ msg: "Short URL not found." , id: IdTodelete});
         }
 
     return res.status(200).json({ msg: "Short URL deleted successfully." });

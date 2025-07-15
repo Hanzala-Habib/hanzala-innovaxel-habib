@@ -17,14 +17,10 @@ const urlSchema= new mongoose.Schema(
         totalclicks:[
             {
                 timestamp:{
-                    type: Date
+                    type: Number
                 }
             }
         ],
-         expiresAt: {
-        type: Date,
-        default: () => new Date(Date.now() + 24 * 60 * 60 * 1000)
-    }
 
     },{timestamps: true}
 );
