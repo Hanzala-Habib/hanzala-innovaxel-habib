@@ -19,6 +19,25 @@ return res.status(201).json({ id: shortID});
     
 }
 
+async function getOriginalUrl(req,res) {
+
+    const shortID= req.params.shortUrl
+   const entry= await URL.findOneAndUpdate({
+        shortID
+    },{
+        $push:{
+            totalclicks:{
+                
+            }
+        }
+    });
+
+    res.redirect(entry.url).status(200).json({originalURL: entry.url});
+
+    
+}
+
 module.exports={
-    generateShortUrl
+    generateShortUrl,
+    getOriginalUrl
 }

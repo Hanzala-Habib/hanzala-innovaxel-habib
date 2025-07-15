@@ -7,5 +7,6 @@ async function connectToDb(dburl) {
 }
 
 module.exports={
-    connectToDb
+    connectToDb,
+
 }
