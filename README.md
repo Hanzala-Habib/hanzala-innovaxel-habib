@@ -43,7 +43,7 @@ output is with original url for the shortId
 
 analytics of the url with the accessed count and timestamps
 
-# PUT request at http://localhost:8001/shorten/deleteId/4HEQnPv8I
+# PUT request at http://localhost:8001/shorten/updateId/your-shortid
 
 Select Body ->raw -> Json
 
