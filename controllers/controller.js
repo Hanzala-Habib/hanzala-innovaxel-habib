@@ -32,8 +32,16 @@ async function getOriginalUrl(req,res) {
         }
     });
 
-    if(!entry.url){
-         res.redirect(entry.url).status(200).json({originalURL: entry.url});
+     
+
+    if(entry){
+         return res.status(200).json({
+            id: entry._id,
+            url: entry.url,
+            shortCode: entry.shortUrl,
+            createdAt: entry.createdAt,
+            updatedAt: entry.updatedAt
+        });
 
     }
     else{
@@ -51,6 +59,8 @@ async function getUrlAnalytics(req,res) {
     const results= await URL.findOne({shortId});
 
     return res.json({
+        url:results.url,
+        shortId:results.shortUrl,
         totalclicks:results.totalclicks.length,
         clickHistory:results.totalclicks
     });
@@ -58,8 +68,30 @@ async function getUrlAnalytics(req,res) {
     
 }
 
+async function updateId(req,res) {
+
+    const shortId=req.params.shortUrl;
+    const {shortCode: newShortCode}=req.body
+
+    await URL.findOneAndUpdate({
+        shortId
+    },{
+        shortUrl: newShortCode
+    },
+    {new: true}
+);
+  res.status(200).json({
+    url: updatedEntry.url,
+    shortCode: updatedEntry.shortUrl,
+    createdAt: updatedEntry.createdAt,
+    updatedAt: updatedEntry.updatedAt
+  })
+    
+}
+
 module.exports={
     generateShortUrl,
     getOriginalUrl,
-    getUrlAnalytics
+    getUrlAnalytics,
+    updateId
 }
