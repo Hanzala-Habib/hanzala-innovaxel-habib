@@ -27,17 +27,39 @@ async function getOriginalUrl(req,res) {
     },{
         $push:{
             totalclicks:{
-                
+                timestamp: Date.now(),
             }
         }
     });
 
-    res.redirect(entry.url).status(200).json({originalURL: entry.url});
+    if(!entry.url){
+         res.redirect(entry.url).status(200).json({originalURL: entry.url});
+
+    }
+    else{
+        res.status(404).json({error: "couldnt fint the url"});
+    }
+
+   
+
+    
+}
+
+async function getUrlAnalytics(req,res) {
+
+    const shortId=req.params.shortUrl;
+    const results= await URL.findOne({shortId});
+
+    return res.json({
+        totalclicks:results.totalclicks.length,
+        clickHistory:results.totalclicks
+    });
 
     
 }
 
 module.exports={
     generateShortUrl,
-    getOriginalUrl
+    getOriginalUrl,
+    getUrlAnalytics
 }
